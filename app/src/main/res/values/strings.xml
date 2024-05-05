@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Project1</string>
+    <string name="vaccination">Vaccination</string>
+    <string name="welcoming">Hi ! Let\'s get you registered.</string>
+    <string name="details">Please provide the following details.</string>
+    <string name="text1">You are a</string>
+    <string name="text2">Pet Owner</string>
+    <string name="text3">Foster Parent</string>
+    <string name="text4">Select Pet</string>
+    <string name="breed">Select Breed</string>
+    <string name="pictures">Pictures</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="ongoing_treatment">Ongoing Treatment</string>
+    <string name="personality_traits">Personality Traits</string>
+    <string name="calm">Calm</string>
+    <string name="plaayful">Plaayful</string>
+    <string name="aggressive">Aggressive</string>
+    <string name="behaviour">Behaviour</string>
+    <string name="well_trained">Well-trained</string>
+    <string name="curious">Curious</string>
+    <string name="loud">Loud</string>
+</resources>

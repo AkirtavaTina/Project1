@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+   <resources>
+        <string-array name="spinnerItems">
+            <item>Cat</item>
+        </string-array>
+    <string-array name="spinnerItems2">
+        <item>British Shorthair</item>
+    </string-array>
+    </resources>
