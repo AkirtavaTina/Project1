@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
             insets
         }
         addTexts()
-        checkForPressed()
+        checkIfClicked()
     }
 
     private fun addTexts(){
@@ -32,47 +32,44 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun textsForButtons(){
-        val mButton: Button = findViewById(R.id.button1)
-        mButton.text = getText(R.string.text2)
-        val mButton2: Button = findViewById(R.id.button2)
-        mButton2.text = getText(R.string.text3)
-        val mButton3: Button = findViewById(R.id.button3)
-        mButton3.text = getText(R.string.yes)
-        val mButton4: Button = findViewById(R.id.button4)
-        mButton4.text = getText(R.string.yes)
-        val mButton5: Button = findViewById(R.id.button5)
-        mButton5.text = getText(R.string.no)
-        val mButton6: Button = findViewById(R.id.button6)
-        mButton6.text = getText(R.string.calm)
-        val mButton7: Button = findViewById(R.id.button7)
-        mButton7.text = getText(R.string.plaayful)
-        val mButton8: Button = findViewById(R.id.button8)
-        mButton8.text = getText(R.string.aggressive)
-        val mButton9: Button = findViewById(R.id.button9)
-        mButton9.text = getText(R.string.no)
+        val buttons = arrayOf(
+            R.id.button1, R.id.button2, R.id.button3,
+            R.id.button4, R.id.button5, R.id.button6,
+            R.id.button7, R.id.button8, R.id.button9
+        )
+
+        buttons.forEachIndexed { index, id ->
+            findViewById<Button>(id).apply {
+                text = when (index) {
+                    0 -> R.string.text2
+                    1 -> R.string.text3
+                    2, 3 -> R.string.yes
+                    5 -> R.string.calm
+                    6 -> R.string.plaayful
+                    7 -> R.string.aggressive
+                    else -> R.string.no
+                }.let { getText(it) }
+            }
+        }
     }
 
     private fun textForTitles(){
-        val view : TextView = findViewById(R.id.textView10)
-        view.text = getText(R.string.welcoming)
-        val view2 : TextView = findViewById(R.id.textView6)
-        view2.text = getText(R.string.details)
-        val view3 : TextView = findViewById(R.id.textView7)
-        view3.text = getText(R.string.text1)
-        val view4 : TextView = findViewById(R.id.textView)
-        view4.text = getText(R.string.text4)
-        val view5 : TextView = findViewById(R.id.textView2)
-        view5.text = getText(R.string.breed)
-        val view6 : TextView = findViewById(R.id.textView3)
-        view6.text = getText(R.string.pictures)
-        val view7 : TextView = findViewById(R.id.textView4)
-        view7.text = getText(R.string.vaccination)
-        val view8 : TextView = findViewById(R.id.textView5)
-        view8.text = getText(R.string.ongoing_treatment)
-        val view9 : TextView = findViewById(R.id.textView8)
-        view9.text = getText(R.string.personality_traits)
-        val view10 : TextView = findViewById(R.id.textView9)
-        view10.text = getText(R.string.behaviour)
+        val textViewMap = mapOf(
+            R.id.textView10 to R.string.welcoming,
+            R.id.textView6 to R.string.details,
+            R.id.textView7 to R.string.text1,
+            R.id.textView to R.string.text4,
+            R.id.textView2 to R.string.breed,
+            R.id.textView3 to R.string.pictures,
+            R.id.textView4 to R.string.vaccination,
+            R.id.textView5 to R.string.ongoing_treatment,
+            R.id.textView8 to R.string.personality_traits,
+            R.id.textView9 to R.string.behaviour
+        )
+
+        textViewMap.forEach {(textViewId, stringResourceId) ->
+            findViewById<TextView>(textViewId).text = getText(stringResourceId)
+        }
     }
 
     private fun textForCheckBox(){
@@ -84,63 +81,24 @@ class MainActivity : AppCompatActivity() {
         box3.text = getText(R.string.loud)
     }
 
-    private fun checkForPressed(){
-        val button1:Button = findViewById(R.id.button1)
-        val button2:Button = findViewById(R.id.button2)
+    private fun clicked(vararg buttonIds: Int) {
+        val buttons = buttonIds.map { findViewById<Button>(it) }
 
-        button1.setOnClickListener {
-           button1.isSelected = !button1.isSelected
-            if(button2.isSelected == true) button2.isSelected = false
-        }
-        button2.setOnClickListener {
-            button2.isSelected = !button2.isSelected
-            if(button1.isSelected == true) button1.isSelected = false
-        }
+        buttons.forEachIndexed { index, button ->
+            button.setOnClickListener {
+                val isSelected = button.isSelected
 
-        val button3:Button = findViewById(R.id.button3)
-        val button9:Button = findViewById(R.id.button9)
-
-        button3.setOnClickListener {
-            button3.isSelected = !button3.isSelected
-            if(button9.isSelected == true) button9.isSelected = false
+                if(isSelected) button.isSelected = false
+                else buttons.forEachIndexed { innerIndex, innerButton ->
+                        innerButton.isSelected = (index == innerIndex) }
+            }
         }
-        button9.setOnClickListener {
-            button9.isSelected = !button9.isSelected
-            if(button3.isSelected == true) button3.isSelected = false
-        }
+    }
 
-        val button4:Button = findViewById(R.id.button4)
-        val button5:Button = findViewById(R.id.button5)
-
-        button4.setOnClickListener {
-            button4.isSelected = !button4.isSelected
-            if(button5.isSelected == true) button5.isSelected = false
-        }
-        button5.setOnClickListener {
-            button5.isSelected = !button5.isSelected
-            if(button4.isSelected == true) button4.isSelected = false
-        }
-
-        val button6:Button = findViewById(R.id.button6)
-        val button7:Button = findViewById(R.id.button7)
-        val button8:Button = findViewById(R.id.button8)
-
-
-        button6.setOnClickListener {
-            button6.isSelected = !button6.isSelected
-            if(button7.isSelected == true) button7.isSelected = false
-            if(button8.isSelected == true) button8.isSelected = false
-        }
-        button7.setOnClickListener {
-            button7.isSelected = !button7.isSelected
-            if(button6.isSelected == true) button6.isSelected = false
-            if(button8.isSelected == true) button8.isSelected = false
-        }
-
-        button8.setOnClickListener {
-            button8.isSelected = !button8.isSelected
-            if(button6.isSelected == true) button6.isSelected = false
-            if(button7.isSelected == true) button7.isSelected = false
-        }
+    private fun checkIfClicked() {
+        clicked(R.id.button1, R.id.button2)
+        clicked(R.id.button3, R.id.button9)
+        clicked(R.id.button4, R.id.button5)
+        clicked(R.id.button6, R.id.button7, R.id.button8)
     }
 }
