@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
             insets
         }
         addTexts()
-
+        checkForPressed()
     }
 
     private fun addTexts(){
@@ -84,4 +84,63 @@ class MainActivity : AppCompatActivity() {
         box3.text = getText(R.string.loud)
     }
 
+    private fun checkForPressed(){
+        val button1:Button = findViewById(R.id.button1)
+        val button2:Button = findViewById(R.id.button2)
+
+        button1.setOnClickListener {
+           button1.isSelected = !button1.isSelected
+            if(button2.isSelected == true) button2.isSelected = false
+        }
+        button2.setOnClickListener {
+            button2.isSelected = !button2.isSelected
+            if(button1.isSelected == true) button1.isSelected = false
+        }
+
+        val button3:Button = findViewById(R.id.button3)
+        val button9:Button = findViewById(R.id.button9)
+
+        button3.setOnClickListener {
+            button3.isSelected = !button3.isSelected
+            if(button9.isSelected == true) button9.isSelected = false
+        }
+        button9.setOnClickListener {
+            button9.isSelected = !button9.isSelected
+            if(button3.isSelected == true) button3.isSelected = false
+        }
+
+        val button4:Button = findViewById(R.id.button4)
+        val button5:Button = findViewById(R.id.button5)
+
+        button4.setOnClickListener {
+            button4.isSelected = !button4.isSelected
+            if(button5.isSelected == true) button5.isSelected = false
+        }
+        button5.setOnClickListener {
+            button5.isSelected = !button5.isSelected
+            if(button4.isSelected == true) button4.isSelected = false
+        }
+
+        val button6:Button = findViewById(R.id.button6)
+        val button7:Button = findViewById(R.id.button7)
+        val button8:Button = findViewById(R.id.button8)
+
+
+        button6.setOnClickListener {
+            button6.isSelected = !button6.isSelected
+            if(button7.isSelected == true) button7.isSelected = false
+            if(button8.isSelected == true) button8.isSelected = false
+        }
+        button7.setOnClickListener {
+            button7.isSelected = !button7.isSelected
+            if(button6.isSelected == true) button6.isSelected = false
+            if(button8.isSelected == true) button8.isSelected = false
+        }
+
+        button8.setOnClickListener {
+            button8.isSelected = !button8.isSelected
+            if(button6.isSelected == true) button6.isSelected = false
+            if(button7.isSelected == true) button7.isSelected = false
+        }
+    }
 }
