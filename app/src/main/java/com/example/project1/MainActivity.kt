@@ -1,5 +1,6 @@
 package com.example.project1
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -8,6 +9,7 @@ import androidx.core.view.WindowInsetsCompat
 import android.widget.Button
 import android.widget.TextView
 import android.widget.CheckBox
+import android.widget.ImageButton
 import androidx.core.content.res.TypedArrayUtils.getText
 import com.example.project1.databinding.ActivityMainBinding
 
@@ -16,11 +18,11 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    @android.annotation.SuppressLint("WrongViewCast")
+override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
+        setContentView(binding.root)
         enableEdgeToEdge()
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -29,6 +31,9 @@ class MainActivity : AppCompatActivity() {
         }
         addTexts()
         checkIfClicked()
+
+        val buttonClick = findViewById<ImageButton>(R.id.action_mode_close_button)
+        buttonClick.setOnClickListener { onBackPressed() }
     }
 
     private fun addTexts(){
@@ -76,13 +81,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun textForCheckBox(){
-        val box1:CheckBox = binding.checkbox1
-        box1.text = getText(R.string.well_trained)
-        val box2:CheckBox = binding.checkbox2
-        box2.text = getText(R.string.curious)
-        val box3:CheckBox = binding.checkbox3
-        box3.text = getText(R.string.loud)
+    private fun textForCheckBox() = with(binding) {
+        checkbox1.text = getText(R.string.well_trained)
+        checkbox2.text = getText(R.string.curious)
+        checkbox3.text = getText(R.string.loud)
     }
 
     private fun clicked(vararg buttons: Button) {

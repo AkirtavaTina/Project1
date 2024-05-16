@@ -20,4 +20,7 @@
     <string name="well_trained">Well-trained</string>
     <string name="curious">Curious</string>
     <string name="loud">Loud</string>
+    <string name="Continue">Continue</string>
+    <string name="startingtext">Connect securely with potential foster\nparents through our app.</string>
+    <string name="welcome_to_paws_connect">Welcome to Paws\nConnect!</string>
 </resources>

@@ -26,9 +26,11 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.022" />
 
-        <Button
+        <ImageButton
+            android:id="@+id/action_mode_close_button"
             android:layout_width="48dp"
             android:layout_height="48dp"
+            android:contentDescription="@null"
             android:background="@drawable/close_button"
             app:layout_constraintEnd_toEndOf="@+id/spinner1"
             app:layout_constraintTop_toTopOf="@+id/textView10" />
