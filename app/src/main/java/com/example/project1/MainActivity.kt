@@ -1,29 +1,29 @@
 package com.example.project1
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
+import android.provider.MediaStore
+import android.widget.Button
+import android.widget.TextView
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import android.widget.Button
-import android.widget.TextView
-import android.widget.CheckBox
-import android.widget.ImageButton
-import androidx.core.content.res.TypedArrayUtils.getText
 import com.example.project1.databinding.ActivityMainBinding
-
+import com.google.android.material.imageview.ShapeableImageView
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var imageView: ShapeableImageView
 
-    @android.annotation.SuppressLint("WrongViewCast")
-override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        enableEdgeToEdge()
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -32,17 +32,56 @@ override fun onCreate(savedInstanceState: Bundle?) {
         addTexts()
         checkIfClicked()
 
-        val buttonClick = findViewById<ImageButton>(R.id.action_mode_close_button)
+        val buttonClick = binding.actionModeCloseButton
         buttonClick.setOnClickListener { onBackPressed() }
+
+        imageView = binding.imvRoundedSquare
+
+        val imageButton = binding.button
+        imageButton.setOnClickListener {
+            openImageChooser()
+        }
     }
 
-    private fun addTexts(){
+    private fun openImageChooser() {
+        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        val pickPhotoIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+
+        val chooserIntent = Intent.createChooser(takePictureIntent, "Select Action").apply {
+            putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf(pickPhotoIntent))
+        }
+
+        startActivityForResult(chooserIntent, 1)
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == RESULT_OK) {
+            when (requestCode) {
+                1 -> {
+                    if (data?.data != null) {
+                        val selectedImage: Uri? = data.data
+                        imageView.setImageURI(selectedImage)
+                    } else {
+                        val extras = data?.extras
+                        val imageBitmap = extras?.get("data") as? Bitmap
+                        imageBitmap?.let {
+                            imageView.setImageBitmap(it)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun addTexts() {
         textsForButtons()
         textForTitles()
         textForCheckBox()
     }
 
-    private fun textsForButtons(){
+    private fun textsForButtons() {
         val buttons = arrayOf(
             binding.button1, binding.button2, binding.button3,
             binding.button4, binding.button5, binding.button6,
@@ -51,20 +90,19 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
         buttons.forEachIndexed { index, button ->
             button.text = when (index) {
-                    0 -> R.string.text2
-                    1 -> R.string.text3
-                    2, 3 -> R.string.yes
-                    5 -> R.string.calm
-                    6 -> R.string.plaayful
-                    7 -> R.string.aggressive
-                    else -> R.string.no
+                0 -> R.string.text2
+                1 -> R.string.text3
+                2, 3 -> R.string.yes
+                5 -> R.string.calm
+                6 -> R.string.plaayful
+                7 -> R.string.aggressive
+                else -> R.string.no
             }.let { getText(it) }
-
         }
     }
 
-    private fun textForTitles(){
-        val textViewMap:Map<TextView, Int> = mapOf(
+    private fun textForTitles() {
+        val textViewMap: Map<TextView, Int> = mapOf(
             binding.textView10 to R.string.welcoming,
             binding.textView6 to R.string.details,
             binding.textView7 to R.string.text1,
@@ -76,7 +114,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
             binding.textView8 to R.string.personality_traits,
             binding.textView9 to R.string.behaviour
         )
-        textViewMap.forEach {(textView, stringResourceId) ->
+        textViewMap.forEach { (textView, stringResourceId) ->
             textView.text = getText(stringResourceId)
         }
     }
@@ -92,9 +130,10 @@ override fun onCreate(savedInstanceState: Bundle?) {
             button.setOnClickListener {
                 val isSelected = button.isSelected
 
-                if(isSelected) button.isSelected = false
+                if (isSelected) button.isSelected = false
                 else buttons.forEachIndexed { innerIndex, innerButton ->
-                        innerButton.isSelected = (index == innerIndex) }
+                    innerButton.isSelected = (index == innerIndex)
+                }
             }
         }
     }
