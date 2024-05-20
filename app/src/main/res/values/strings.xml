@@ -23,4 +23,6 @@
     <string name="Continue">Continue</string>
     <string name="startingtext">Connect securely with potential foster\nparents through our app.</string>
     <string name="welcome_to_paws_connect">Welcome to Paws\nConnect!</string>
+    <string name="take_photo">Take Photo</string>
+
 </resources>

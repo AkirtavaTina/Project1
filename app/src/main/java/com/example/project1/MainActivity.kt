@@ -1,19 +1,20 @@
 package com.example.project1
 
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.widget.Button
 import android.widget.TextView
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.project1.databinding.ActivityMainBinding
 import com.google.android.material.imageview.ShapeableImageView
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -39,19 +40,49 @@ class MainActivity : AppCompatActivity() {
 
         val imageButton = binding.button
         imageButton.setOnClickListener {
-            openImageChooser()
+            val builder: android.app.AlertDialog.Builder = android.app.AlertDialog.Builder(this)
+
+
+//Setting message manually and performing action on button click
+            builder.setMessage("Which app to use?")
+                .setCancelable(false)
+                .setPositiveButton("Gallery",
+                    DialogInterface.OnClickListener { dialog, id ->
+                        openGallery()
+                        dialog.cancel()
+                    })
+                .setNegativeButton(
+                    "CameraX",
+                    DialogInterface.OnClickListener { dialog, id -> //  Action for 'NO' Button
+                        val intent = Intent(this, CameraXApp::class.java)
+                        startActivityForResult(intent, 1)
+
+                        dialog.cancel()
+                    })
+
+
+            //Creating dialog box
+            val alert: android.app.AlertDialog? = builder.create()
+
+
+            //Setting the title manually
+            alert?.setTitle("Open With")
+            alert?.show()
+//            val intent = Intent(this, CameraXApp::class.java)
+//            startActivityForResult(intent, 1)
         }
     }
 
-    private fun openImageChooser() {
-        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        val pickPhotoIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
 
-        val chooserIntent = Intent.createChooser(takePictureIntent, "Select Action").apply {
-            putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf(pickPhotoIntent))
-        }
 
-        startActivityForResult(chooserIntent, 1)
+    private fun openGallery() {
+//        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        val pickPhotoIntent =
+            Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+
+        val chooserIntent = Intent.createChooser(pickPhotoIntent, "Select Action")
+//        startActivity(Intent.createChooser(Intent(Intent.ACTION_SEARCH), "share"))
+        startActivityForResult(chooserIntent, 2)
     }
 
     @Deprecated("Deprecated in Java")
@@ -60,20 +91,24 @@ class MainActivity : AppCompatActivity() {
         if (resultCode == RESULT_OK) {
             when (requestCode) {
                 1 -> {
+                    val bitmap = BitmapFactory.decodeStream(
+                        this
+                            .openFileInput("myImage")
+                    )
+                    imageView.setImageBitmap(bitmap)
+                }
+                2 -> {
+
                     if (data?.data != null) {
                         val selectedImage: Uri? = data.data
                         imageView.setImageURI(selectedImage)
-                    } else {
-                        val extras = data?.extras
-                        val imageBitmap = extras?.get("data") as? Bitmap
-                        imageBitmap?.let {
-                            imageView.setImageBitmap(it)
-                        }
                     }
                 }
             }
         }
     }
+
+
 
     private fun addTexts() {
         textsForButtons()
