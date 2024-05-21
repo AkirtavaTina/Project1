@@ -26,9 +26,11 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.022" />
 
-        <Button
+        <ImageButton
+            android:id="@+id/action_mode_close_button"
             android:layout_width="48dp"
             android:layout_height="48dp"
+            android:contentDescription="@null"
             android:background="@drawable/close_button"
             app:layout_constraintEnd_toEndOf="@+id/spinner1"
             app:layout_constraintTop_toTopOf="@+id/textView10" />
@@ -149,21 +151,24 @@
             android:id="@+id/button"
             android:layout_width="64sp"
             android:layout_height="64dp"
-            android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"
             android:background="@drawable/second_button_style"
             android:contentDescription="@null"
             android:fontFamily="@font/nunitosemibold"
-            app:layout_constraintStart_toEndOf="@+id/imvRoundedSquare3"
-            app:layout_constraintTop_toTopOf="@+id/imvRoundedSquare3" />
+            app:layout_constraintStart_toStartOf="@+id/textView3"
+            app:layout_constraintTop_toBottomOf="@+id/textView3"
+             />
+
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imvRoundedSquare"
             android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:layout_marginTop="12dp"
-            android:src="@drawable/adorable_animal_blur_british_shorthair"
-            app:layout_constraintStart_toStartOf="@+id/textView3"
-            app:layout_constraintTop_toBottomOf="@+id/textView3"
+            android:layout_height="64sp"
+            android:layout_marginStart="16dp"
+            android:background="@drawable/first_button_style"
+            android:scaleType="centerCrop"
+            app:layout_constraintStart_toEndOf="@+id/imvRoundedSquare3"
+            app:layout_constraintTop_toTopOf="@+id/imvRoundedSquare3"
             app:shapeAppearanceOverlay="@style/RoundedSquare" />
 
         <com.google.android.material.imageview.ShapeableImageView
@@ -171,9 +176,10 @@
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:layout_marginStart="16dp"
-            android:src="@drawable/adorable_animal_british_shorthair_cat"
-            app:layout_constraintStart_toEndOf="@+id/imvRoundedSquare"
-            app:layout_constraintTop_toTopOf="@+id/imvRoundedSquare"
+            android:scaleType="centerCrop"
+            android:background="@drawable/first_button_style"
+            app:layout_constraintStart_toEndOf="@+id/button"
+            app:layout_constraintTop_toTopOf="@+id/button"
             app:shapeAppearanceOverlay="@style/RoundedSquare" />
 
         <com.google.android.material.imageview.ShapeableImageView
@@ -181,7 +187,8 @@
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:layout_marginStart="16dp"
-            android:src="@drawable/pexel_125451"
+            android:scaleType="centerCrop"
+            android:background="@drawable/first_button_style"
             app:layout_constraintStart_toEndOf="@+id/imvRoundedSquare2"
             app:layout_constraintTop_toTopOf="@+id/imvRoundedSquare2"
             app:shapeAppearanceOverlay="@style/RoundedSquare" />
@@ -194,8 +201,8 @@
             android:fontFamily="@font/nunitobold"
             android:textColor="@color/black"
             android:textSize="16.8sp"
-            app:layout_constraintStart_toStartOf="@+id/imvRoundedSquare"
-            app:layout_constraintTop_toBottomOf="@+id/imvRoundedSquare" />
+            app:layout_constraintStart_toStartOf="@+id/button"
+            app:layout_constraintTop_toBottomOf="@+id/button" />
 
         <Button
             android:id="@+id/button3"
