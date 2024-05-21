@@ -19,7 +19,9 @@ import com.google.android.material.imageview.ShapeableImageView
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var imageView: ShapeableImageView
+    private lateinit var imageView1: ShapeableImageView
+    private lateinit var imageView2: ShapeableImageView
+    private lateinit var imageView3: ShapeableImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +38,9 @@ class MainActivity : AppCompatActivity() {
         val buttonClick = binding.actionModeCloseButton
         buttonClick.setOnClickListener { onBackPressed() }
 
-        imageView = binding.imvRoundedSquare
+        imageView1 = binding.imvRoundedSquare2
+        imageView2 = binding.imvRoundedSquare3
+        imageView3 = binding.imvRoundedSquare
 
         val imageButton = binding.button
         imageButton.setOnClickListener {
@@ -95,13 +99,21 @@ class MainActivity : AppCompatActivity() {
                         this
                             .openFileInput("myImage")
                     )
-                    imageView.setImageBitmap(bitmap)
+                    if(imageView1.getDrawable() == null)
+                        imageView1.setImageBitmap(bitmap)
+                    else if(imageView2.getDrawable() == null)
+                    imageView2.setImageBitmap(bitmap)
+                    else imageView3.setImageBitmap(bitmap)
                 }
                 2 -> {
 
                     if (data?.data != null) {
                         val selectedImage: Uri? = data.data
-                        imageView.setImageURI(selectedImage)
+                        if(imageView1.getDrawable() == null)
+                            imageView1.setImageURI(selectedImage)
+                        else if(imageView2.getDrawable() == null)
+                            imageView2.setImageURI(selectedImage)
+                        else imageView3.setImageURI(selectedImage)
                     }
                 }
             }
