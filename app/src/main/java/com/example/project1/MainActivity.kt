@@ -1,5 +1,6 @@
 package com.example.project1
 
+import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Bitmap
@@ -9,6 +10,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.widget.Button
 import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -19,9 +21,6 @@ import com.google.android.material.imageview.ShapeableImageView
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var imageView1: ShapeableImageView
-    private lateinit var imageView2: ShapeableImageView
-    private lateinit var imageView3: ShapeableImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,83 +34,75 @@ class MainActivity : AppCompatActivity() {
         addTexts()
         checkIfClicked()
 
-        val buttonClick = binding.actionModeCloseButton
-        buttonClick.setOnClickListener { onBackPressed() }
+        binding.actionModeCloseButton.setOnClickListener { onBackPressed() }
 
-        imageView1 = binding.imvRoundedSquare2
-        imageView2 = binding.imvRoundedSquare3
-        imageView3 = binding.imvRoundedSquare
-
-        val imageButton = binding.button
-        imageButton.setOnClickListener {
+        binding.button.setOnClickListener {
             val builder: android.app.AlertDialog.Builder = android.app.AlertDialog.Builder(this)
 
-
-//Setting message manually and performing action on button click
             builder.setMessage("Which app to use?")
                 .setCancelable(false)
                 .setPositiveButton("Gallery",
-                    DialogInterface.OnClickListener { dialog, id ->
+                    DialogInterface.OnClickListener { dialog, _ ->
                         openGallery()
                         dialog.cancel()
                     })
                 .setNegativeButton(
                     "CameraX",
-                    DialogInterface.OnClickListener { dialog, id -> //  Action for 'NO' Button
+                    DialogInterface.OnClickListener { dialog, _ ->
                         val intent = Intent(this, CameraXApp::class.java)
-                        startActivityForResult(intent, 1)
-
+                        resultLauncher.launch(intent)
                         dialog.cancel()
                     })
-
-
-            //Creating dialog box
             val alert: android.app.AlertDialog? = builder.create()
-
-
-            //Setting the title manually
             alert?.setTitle("Open With")
             alert?.show()
-//            val intent = Intent(this, CameraXApp::class.java)
-//            startActivityForResult(intent, 1)
         }
     }
 
 
+    private var resultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data: Intent? = result.data
+                when (data?.getStringExtra("source")) {
+                    "camera" -> activityResult(1, result.resultCode, data)
+                    else -> activityResult(2, result.resultCode, data)
+                }
+            }
+        }
 
     private fun openGallery() {
-//        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         val pickPhotoIntent =
             Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-
         val chooserIntent = Intent.createChooser(pickPhotoIntent, "Select Action")
-//        startActivity(Intent.createChooser(Intent(Intent.ACTION_SEARCH), "share"))
-        startActivityForResult(chooserIntent, 2)
+        pickPhotoIntent.putExtra("source", "gallery")
+        resultLauncher.launch(chooserIntent)
     }
 
-    @Deprecated("Deprecated in Java")
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    private fun activityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK) {
+            val imageView1 = binding.imvRoundedSquare2
+            val imageView2 = binding.imvRoundedSquare3
+            val imageView3 = binding.imvRoundedSquare
             when (requestCode) {
                 1 -> {
                     val bitmap = BitmapFactory.decodeStream(
-                        this
-                            .openFileInput("myImage")
+                        this.openFileInput("myImage")
                     )
-                    if(imageView1.getDrawable() == null)
+                    if (imageView1.getDrawable() == null)
                         imageView1.setImageBitmap(bitmap)
-                    else if(imageView2.getDrawable() == null)
-                    imageView2.setImageBitmap(bitmap)
+                    else if (imageView2.getDrawable() == null)
+                        imageView2.setImageBitmap(bitmap)
                     else imageView3.setImageBitmap(bitmap)
                 }
-                2 -> {
 
+                2 -> {
                     if (data?.data != null) {
                         val selectedImage: Uri? = data.data
-                        if(imageView1.getDrawable() == null)
+                        if (imageView1.getDrawable() == null)
                             imageView1.setImageURI(selectedImage)
-                        else if(imageView2.getDrawable() == null)
+                        else if (imageView2.getDrawable() == null)
                             imageView2.setImageURI(selectedImage)
                         else imageView3.setImageURI(selectedImage)
                     }
@@ -121,7 +112,6 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
     private fun addTexts() {
         textsForButtons()
         textForTitles()
@@ -129,23 +119,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun textsForButtons() {
-        val buttons = arrayOf(
-            binding.button1, binding.button2, binding.button3,
-            binding.button4, binding.button5, binding.button6,
-            binding.button7, binding.button8, binding.button9
-        )
-
-        buttons.forEachIndexed { index, button ->
-            button.text = when (index) {
-                0 -> R.string.text2
-                1 -> R.string.text3
-                2, 3 -> R.string.yes
-                5 -> R.string.calm
-                6 -> R.string.plaayful
-                7 -> R.string.aggressive
-                else -> R.string.no
-            }.let { getText(it) }
-        }
+        binding.button1.text = getText(R.string.text2)
+        binding.button2.text = getText(R.string.text3)
+        binding.button3.text = getText(R.string.yes)
+        binding.button4.text = getText(R.string.yes)
+        binding.button5.text = getText(R.string.no)
+        binding.button6.text = getText(R.string.calm)
+        binding.button7.text = getText(R.string.playful)
+        binding.button8.text = getText(R.string.aggressive)
+        binding.button9.text = getText(R.string.no)
     }
 
     private fun textForTitles() {

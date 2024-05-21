@@ -76,6 +76,8 @@ class CameraXApp : AppCompatActivity() {
                         )
                         val in1: Intent = Intent()
                         in1.putExtra("image", createImageFromBitmap(nbit))
+                        in1.putExtra("source", "camera")
+
                         setResult(Activity.RESULT_OK, in1)
                         finish()
                     }
