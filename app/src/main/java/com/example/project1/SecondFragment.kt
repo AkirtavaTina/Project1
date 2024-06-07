@@ -1,5 +1,6 @@
 package com.example.project1
 
+import ButtonsViewModel
 import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.content.DialogInterface
@@ -8,6 +9,7 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +17,9 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.lifecycle.Observer
 import com.example.project1.databinding.FragmentSecondBinding
 
 
@@ -23,6 +27,8 @@ class SecondFragment : Fragment() {
 
     private var _binding: FragmentSecondBinding? = null
     private val binding get() = _binding!!
+
+    private val buttonViewModel: ButtonsViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,6 +45,12 @@ class SecondFragment : Fragment() {
         binding.actionModeCloseButton.setOnClickListener {
             findNavController().navigateUp()
         }
+        askForApp()
+
+
+    }
+
+    private fun askForApp() {
         binding.button.setOnClickListener {
             val builder: android.app.AlertDialog.Builder = android.app.AlertDialog.Builder(context)
             builder.setMessage("Which app to use?")
@@ -59,9 +71,7 @@ class SecondFragment : Fragment() {
             alert?.setTitle("Open With")
             alert?.show()
         }
-
     }
-
 
 
     private var resultLauncher =
@@ -157,13 +167,23 @@ class SecondFragment : Fragment() {
     }
 
     private fun clicked(vararg buttons: Button) {
-        buttons.forEachIndexed { index, button ->
-            button.setOnClickListener {
-                val isSelected = button.isSelected
 
-                if (isSelected) button.isSelected = false
-                else buttons.forEachIndexed { innerIndex, innerButton ->
-                    innerButton.isSelected = (index == innerIndex)
+        buttons.forEach { button ->
+            buttonViewModel.buttonStates.observe(viewLifecycleOwner, Observer { buttonStates ->
+                buttonStates?.let {
+                    button.isSelected = it[button.id] == true
+                }
+            })
+
+            button.setOnClickListener {
+                val newState = !(buttonViewModel.buttonStates.value?.get(button.id) ?: false)
+
+                if (newState) {
+                    buttons.forEach {
+                        buttonViewModel.setButtonState(it.id, (it.id == button.id))
+                    }
+                } else {
+                    buttonViewModel.setButtonState(button.id, false)
                 }
             }
         }
