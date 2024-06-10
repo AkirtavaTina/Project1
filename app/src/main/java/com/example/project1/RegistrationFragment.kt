@@ -9,7 +9,6 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,12 +19,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.lifecycle.Observer
-import com.example.project1.databinding.FragmentSecondBinding
+import com.example.project1.databinding.FragmentRegistrationBinding
 
 
-class SecondFragment : Fragment() {
+class RegistrationFragment : Fragment() {
 
-    private var _binding: FragmentSecondBinding? = null
+    private var _binding: FragmentRegistrationBinding? = null
     private val binding get() = _binding!!
 
     private val buttonViewModel: ButtonsViewModel by viewModels()
@@ -33,8 +32,8 @@ class SecondFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentSecondBinding.inflate(inflater, container, false)
+    ): View {
+        _binding = FragmentRegistrationBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -46,15 +45,13 @@ class SecondFragment : Fragment() {
             findNavController().navigateUp()
         }
         askForApp()
-
-
     }
 
     private fun askForApp() {
         binding.button.setOnClickListener {
             val builder: android.app.AlertDialog.Builder = android.app.AlertDialog.Builder(context)
             builder.setMessage("Which app to use?")
-                .setCancelable(false)
+                .setCancelable(true)
                 .setPositiveButton("Gallery",
                     DialogInterface.OnClickListener { dialog, _ ->
                         openGallery()
@@ -177,7 +174,6 @@ class SecondFragment : Fragment() {
 
             button.setOnClickListener {
                 val newState = !(buttonViewModel.buttonStates.value?.get(button.id) ?: false)
-
                 if (newState) {
                     buttons.forEach {
                         buttonViewModel.setButtonState(it.id, (it.id == button.id))
@@ -195,6 +191,5 @@ class SecondFragment : Fragment() {
         clicked(binding.button4, binding.button5)
         clicked(binding.button6, binding.button7, binding.button8)
     }
-
 
 }

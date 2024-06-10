@@ -15,6 +15,5 @@ class ButtonsViewModel : ViewModel() {
         val updatedStates = _buttonStates.value.orEmpty().toMutableMap()
         updatedStates[buttonId] = isClicked
         _buttonStates.value = updatedStates
-
     }
 }

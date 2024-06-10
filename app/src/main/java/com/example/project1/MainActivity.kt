@@ -11,7 +11,7 @@ import androidx.navigation.fragment.NavHostFragment
 
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
-    lateinit var navController : NavController
+    private lateinit var navController : NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
